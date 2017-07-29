@@ -16,6 +16,7 @@
             background-color: steelblue;
             clear: left;
             text-align: center;
+            /*text-shadow: 2px 2px 3px #ccc;*/
         }
         nav {
             float: left;
@@ -38,6 +39,21 @@
             padding: 1em;
             overflow: hidden;
         }
+        table.resultTab {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td.resultTab, th.resultTab {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr.resultTab:nth-child(even) {
+            background-color: #dddddd;
+        }
     </style>
 </head>
 <body>
@@ -45,7 +61,7 @@
 <div class="container">
     <header>
         <h1>SQL client</h1>
-        ${connectionStatus}
+        Connected to: ${connectionStatus}
     </header>
     <nav>
         <div>Commands:</div>

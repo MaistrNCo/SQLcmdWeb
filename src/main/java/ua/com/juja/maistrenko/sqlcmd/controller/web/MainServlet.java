@@ -2,6 +2,7 @@ package ua.com.juja.maistrenko.sqlcmd.controller.web;
 
 import ua.com.juja.maistrenko.sqlcmd.controller.service.Service;
 import ua.com.juja.maistrenko.sqlcmd.controller.service.ServiceImpl;
+import ua.com.juja.maistrenko.sqlcmd.model.ConnectionSettings;
 import ua.com.juja.maistrenko.sqlcmd.model.DBManager;
 
 import javax.servlet.ServletException;
@@ -24,74 +25,122 @@ public class MainServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = getAction(req);
+        req.setAttribute("resultBlock", "result.jsp");
+        String article;
         if (action.startsWith("/list")) {
-            req.setAttribute("article","listArticle.jsp");
+            article ="listArticle.jsp";
         } else if (action.startsWith("/find")) {
-            req.setAttribute("article","findArticle.jsp");
+            article = "findArticle.jsp";
+            req.setAttribute("tablesList",req.getSession().getAttribute("tablesList"));
         } else if (action.startsWith("/create")) {
-            req.setAttribute("article","createArticle.jsp");
+            article ="createArticle.jsp";
         } else if (action.startsWith("/insert")) {
-            req.setAttribute("article","insertArticle.jsp");
+            article = "insertArticle.jsp";
         } else if (action.startsWith("/update")) {
-            req.setAttribute("article","updateArticle.jsp");
+            article = "updateArticle.jsp";
         } else if (action.startsWith("/delete")) {
-            req.setAttribute("article","deleteArticle.jsp");
+            article = "deleteArticle.jsp";
         } else if (action.startsWith("/clear")) {
-            req.setAttribute("article","clearArticle.jsp");
+            article = "clearArticle.jsp";
         } else if (action.startsWith("/drop")) {
-            req.setAttribute("article", "dropArticle.jsp");
+            article = "dropArticle.jsp";
         } else {  //(action.startsWith("/connect")){
-            req.setAttribute("article","connectArticle.jsp");
+            article = "connectArticle.jsp";
         }
-        drawMainPage(req, resp);
+        drawMainPage(req, resp, article);
 
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = getAction(req);
-        if (action.startsWith("/connect")){
-            DBManager dbManager = (DBManager) req.getSession().getAttribute("db_manager");
-            if (dbManager!=null) {
-                service.closeConnection(dbManager);
-                req.getSession().setAttribute("conn_settings","");
-            }
-            List<String> settings = new LinkedList<>();
-            String type = req.getParameter("type");
-
-            settings.add(req.getParameter("servername"));
-            settings.add(req.getParameter("port"));
-            settings.add(req.getParameter("database"));
-            settings.add(req.getParameter("username"));
-            settings.add(req.getParameter("password"));
-
-            try {
-                dbManager = service.connect(settings,type);
-                req.getSession().setAttribute("db_manager",dbManager);
-                req.getSession().setAttribute("conn_settings",settings.toString());
-                req.setAttribute("result","OK");
-            } catch (Exception e) {
-                req.setAttribute("result",e.getMessage());
-            }
-            req.setAttribute("article","connectArticle.jsp");
-            drawMainPage(req, resp);
+        DBManager dbManager = (DBManager) req.getSession().getAttribute("db_manager");
+        req.setAttribute("resultBlock", "result.jsp");
+        String article = "connectArticle.jsp";
+        if (dbManager == null && !action.startsWith("/connect")) {
+            req.setAttribute("article", article);
+            resp.sendRedirect(resp.encodeRedirectURL("menu"));
         }
-        //        req.setAttribute("menuItems",service.getMenuList());
-//        req.getRequestDispatcher("menu.jsp").forward(req, resp);
-        //doGet(req,resp);
+
+        if (action.startsWith("/connect")) {
+            //article = "connectArticle.jsp";
+            if (dbManager != null) {
+                service.closeConnection(dbManager);
+                req.getSession().setAttribute("conn_settings", null);
+            }
+            String type = req.getParameter("type");
+            ConnectionSettings settings = new ConnectionSettings(getConnectionParameters(req));
+            try {
+                dbManager = service.connect(settings, type);
+                req.getSession().setAttribute("db_manager", dbManager);
+                req.getSession().setAttribute("conn_settings", settings);
+                req.setAttribute("result", "OK");
+            } catch (Exception e) {
+                req.setAttribute("result", e.getMessage());
+            }
+        } else if (action.startsWith("/list")) {
+            article = "listArticle.jsp";
+            try {
+                List<String> list = service.list(dbManager);
+                List<String> columns = new LinkedList<>();
+                columns.add("Table");
+                req.getSession().setAttribute("tablesList",list);
+                req.setAttribute("tableColumnsList", columns);
+                req.setAttribute("table", list);
+                req.setAttribute("resultBlock", "table.jsp");
+            } catch (Exception e) {
+                req.setAttribute("result", e.getMessage());
+            }
+        } else if (action.startsWith("/find")) {
+            article = "findArticle.jsp";
+            try {
+                ;
+                List<List<String>> list = service.find(dbManager, req.getParameter("tableName"));
+                List<String> columns = service.getColumns(dbManager, req.getParameter("tableName"));
+                req.setAttribute("tableColumnsList", columns);
+                req.setAttribute("table", list);
+                req.setAttribute("resultBlock", "table.jsp");
+            } catch (Exception e) {
+                req.setAttribute("result", e.getMessage());
+            }
+        }
+        drawMainPage(req, resp, article);
     }
 
-    private void drawMainPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private List<String> getConnectionParameters(HttpServletRequest req) {
+        List<String> settings = new LinkedList<>();
+        settings.add(req.getParameter("servername"));
+        settings.add(req.getParameter("port"));
+        settings.add(req.getParameter("database"));
+        settings.add(req.getParameter("username"));
+        settings.add(req.getParameter("password"));
+        return settings;
+    }
 
-        req.setAttribute("connectionStatus",req.getSession().getAttribute("conn_settings"));
-        req.setAttribute("menuItems",service.getMenuList());
+    private String createConnectionInfo(ConnectionSettings settings) {
+        if (settings != null ) {
+            StringBuilder connectionInfo = new StringBuilder();
+            connectionInfo.append(settings.getAddress());
+            connectionInfo.append(" user=");
+            connectionInfo.append(settings.getUsername());
+            return connectionInfo.toString();
+        } else {
+            return "None";
+        }
+    }
+
+    private void drawMainPage(HttpServletRequest req, HttpServletResponse resp, String article) throws ServletException, IOException {
+        String conInfo = createConnectionInfo((ConnectionSettings) req.getSession().getAttribute("conn_settings"));
+        req.setAttribute("article", article);
+        req.setAttribute("connectionStatus", conInfo);
+        req.setAttribute("menuItems", service.getMenuList());
         req.getRequestDispatcher("menu.jsp").forward(req, resp);
     }
 
     @Override
     public void destroy() {
         super.destroy();
-        //TODO close open connection
+
     }
 
     private String getAction(HttpServletRequest req) {

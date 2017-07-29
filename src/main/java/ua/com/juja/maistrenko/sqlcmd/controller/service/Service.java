@@ -9,9 +9,13 @@ public interface Service {
 
     List<String> getMenuList();
 
-    String connectionStatus();
-
-    DBManager connect(List<String> conSettings, String type);
+    DBManager connect(ConnectionSettings conSettings, String type);
 
     void closeConnection(DBManager dbManager);
+
+    List<String> list(DBManager dbManager);
+
+    List<List<String>> find(DBManager dbManager, String tableName);
+
+    List<String> getColumns(DBManager dbManager, String tableName);
 }

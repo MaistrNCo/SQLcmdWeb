@@ -2,6 +2,7 @@ package ua.com.juja.maistrenko.sqlcmd.controller.service;
 
 import ua.com.juja.maistrenko.sqlcmd.model.ConnectionSettings;
 import ua.com.juja.maistrenko.sqlcmd.model.DBManager;
+import ua.com.juja.maistrenko.sqlcmd.model.RowData;
 import ua.com.juja.maistrenko.sqlcmd.model.impl.MySQLdbManager;
 import ua.com.juja.maistrenko.sqlcmd.model.impl.PostgresDBManager;
 
@@ -26,25 +27,47 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public String connectionStatus() {
-        return null;
-    }
-
-    @Override
-    public DBManager connect(List<String> conSettings, String type) {
+    public DBManager connect(ConnectionSettings conSettings, String type) {
         DBManager dbManager;
         if (type.contains("MySQL")){
             dbManager = new MySQLdbManager();
         }else{
             dbManager = new PostgresDBManager();
         }
-        ConnectionSettings connectionSettings = new ConnectionSettings(conSettings, dbManager);
-        dbManager.connect(connectionSettings);
+        dbManager.connect(conSettings);
         return dbManager;
     }
 
     @Override
     public void closeConnection(DBManager dbManager) {
         dbManager.disconnect();
+    }
+
+    @Override
+    public List<String> list(DBManager dbManager) {
+        List<String> result = new LinkedList<>();
+        result.addAll(dbManager.getTablesList());
+        return result;
+    }
+
+    @Override
+    public List<List<String>> find(DBManager dbManager, String tableName) {
+        List<List<String>> result = new LinkedList<>();
+        for (RowData row:dbManager.selectAllFromTable(tableName)) {
+            List<String> listRow = new LinkedList<>();
+            result.add(listRow);
+            for (Object value:row.getValues()) {
+                listRow.add((String)value);
+            }
+
+        }
+        return result;
+    }
+
+    @Override
+    public List<String> getColumns(DBManager dbManager, String tableName) {
+        List<String> result = new LinkedList<>();
+        result.addAll(dbManager.getColumnsNames(tableName));
+        return result;
     }
 }

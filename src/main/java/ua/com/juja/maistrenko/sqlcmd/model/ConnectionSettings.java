@@ -25,6 +25,13 @@ public class ConnectionSettings {
     public ConnectionSettings() {
         //default constructor
     }
+    public ConnectionSettings( List<String> set) {
+        this.server   = set.get(INDEX_SERVER_NAME);
+        this.dataBase = set.get(INDEX_DATABASE_NAME);
+        this.username = set.get(INDEX_USER_NAME);
+        this.password = set.get(INDEX_USER_PASS);
+        this.port     = set.get(INDEX_SERVER_PORT);
+    }
 
     public ConnectionSettings(List<String> set, DBManager dbManager) {
         if (set.get(INDEX_SERVER_NAME).trim().length() == 0) {
