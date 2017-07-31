@@ -73,14 +73,22 @@ public class ServiceImpl implements Service {
 
     @Override
     public String clearTable(DBManager dbManager, String tableName) {
-        return "Deleted " + dbManager.clear(tableName) + " rows in table " + tableName;
+        return "Deleted " + dbManager.clear(tableName) + " rows in table '" + tableName + "'";
+    }
+
+    @Override
+    public String update(DBManager dbManager, String tableName, String condColumnName, String condValue, RowData setValues) {
+        RowData condValues = new RowData();
+        condValues.put(condColumnName,condValue);
+
+        return "Updated " + dbManager.update(tableName,condValues,setValues) + "rows in table '"+ tableName + "'";
     }
 
     @Override
     public String delete(DBManager dbManager, String tableName, String columnName, String value) {
         RowData condValue = new RowData();
         condValue.put(columnName,value);
-        return "Deleted " + dbManager.delete(tableName,condValue) + " rows in table " + tableName;
+        return "Deleted " + dbManager.delete(tableName,condValue) + " rows in table '" + tableName + "'";
     }
 
     @Override

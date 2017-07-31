@@ -4,6 +4,7 @@ import ua.com.juja.maistrenko.sqlcmd.controller.service.Service;
 import ua.com.juja.maistrenko.sqlcmd.controller.service.ServiceImpl;
 import ua.com.juja.maistrenko.sqlcmd.model.ConnectionSettings;
 import ua.com.juja.maistrenko.sqlcmd.model.DBManager;
+import ua.com.juja.maistrenko.sqlcmd.model.RowData;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -28,7 +29,7 @@ public class MainServlet extends HttpServlet {
         req.setAttribute("resultBlock", "result.jsp");
         String article;
         req.setAttribute("tablesList", req.getSession().getAttribute("tablesList"));
-        req.setAttribute("tableName", req.getParameter("tableName"));
+        //req.setAttribute("tableName", req.getParameter("tableName"));
         if (action.startsWith("/list")) {
             article = "listArticle.jsp";
         } else if (action.startsWith("/find")) {
@@ -57,7 +58,7 @@ public class MainServlet extends HttpServlet {
         String action = getAction(req);
         DBManager dbManager = (DBManager) req.getSession().getAttribute("db_manager");
         req.setAttribute("tablesList", req.getSession().getAttribute("tablesList"));
-        req.setAttribute("tableName", req.getParameter("tableName"));
+        //req.setAttribute("tableName", req.getParameter("tableName"));
         req.setAttribute("resultBlock", "result.jsp");
         String article = "connectArticle.jsp";
         List<String> tablesList = (List<String>) req.getSession().getAttribute("tablesList");
@@ -136,9 +137,25 @@ public class MainServlet extends HttpServlet {
             article = "deleteArticle.jsp";
             try {
                 String tableName = req.getParameter("tableName");
-                String columnName = req.getParameter("condColumnName");
-                String value = req.getParameter("condValue");
-                String result = service.delete(dbManager, tableName, columnName,value);
+                String condColumnName = req.getParameter("condColumnName");
+                String condValue = req.getParameter("condValue");
+                String result = service.delete(dbManager, tableName, condColumnName,condValue);
+                req.setAttribute("result", result);
+                req.setAttribute("resultBlock", "result.jsp");
+            } catch (Exception e) {
+                req.setAttribute("result", e.getMessage());
+            }
+        } else if (action.startsWith("/update")) {
+            article = "updateArticle.jsp";
+            try {
+                String tableName = req.getParameter("tableName");
+                String condColumnName = req.getParameter("condColumnName");
+                String condValue = req.getParameter("condValue");
+                String columnName = req.getParameter("updateColumnName");
+                String value = req.getParameter("updateValue");
+                RowData setValues = new RowData();
+                setValues.put(columnName,value);
+                String result = service.update(dbManager, tableName, condColumnName,condValue,setValues);
                 req.setAttribute("result", result);
                 req.setAttribute("resultBlock", "result.jsp");
             } catch (Exception e) {

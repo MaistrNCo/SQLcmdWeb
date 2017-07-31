@@ -2,6 +2,7 @@ package ua.com.juja.maistrenko.sqlcmd.controller.service;
 
 import ua.com.juja.maistrenko.sqlcmd.model.ConnectionSettings;
 import ua.com.juja.maistrenko.sqlcmd.model.DBManager;
+import ua.com.juja.maistrenko.sqlcmd.model.RowData;
 
 import java.util.List;
 
@@ -24,4 +25,6 @@ public interface Service {
     String dropTable(DBManager dbManager, String tableName);
 
     String delete(DBManager dbManager, String tableName, String columnName, String value);
+
+    String update(DBManager dbManager, String tableName, String condColumnName, String condValue, RowData setValues);
 }

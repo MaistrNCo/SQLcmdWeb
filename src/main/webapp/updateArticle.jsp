@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <article>
     <h1>Update</h1>
-    <form action="delete" method="post">
+    <form action="update" method="post">
         <table>
             <tr>
                 <td>Table:</td>
@@ -24,7 +24,7 @@
                 <td>Column:</td>
                 <td><input name="updateColumnName" ></td>
                 <td>Value:</td>
-                <td><input name="updteValue" ></td>
+                <td><input name="updateValue" ></td>
             </tr>
 
             <tr>
