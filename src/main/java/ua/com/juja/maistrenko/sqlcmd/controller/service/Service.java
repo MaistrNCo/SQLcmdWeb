@@ -22,4 +22,6 @@ public interface Service {
     String clearTable(DBManager dbManager, String tableName);
 
     String dropTable(DBManager dbManager, String tableName);
+
+    String delete(DBManager dbManager, String tableName, String columnName, String value);
 }

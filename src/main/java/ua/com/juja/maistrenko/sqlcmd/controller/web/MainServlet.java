@@ -28,6 +28,7 @@ public class MainServlet extends HttpServlet {
         req.setAttribute("resultBlock", "result.jsp");
         String article;
         req.setAttribute("tablesList", req.getSession().getAttribute("tablesList"));
+        req.setAttribute("tableName", req.getParameter("tableName"));
         if (action.startsWith("/list")) {
             article = "listArticle.jsp";
         } else if (action.startsWith("/find")) {
@@ -55,6 +56,8 @@ public class MainServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = getAction(req);
         DBManager dbManager = (DBManager) req.getSession().getAttribute("db_manager");
+        req.setAttribute("tablesList", req.getSession().getAttribute("tablesList"));
+        req.setAttribute("tableName", req.getParameter("tableName"));
         req.setAttribute("resultBlock", "result.jsp");
         String article = "connectArticle.jsp";
         List<String> tablesList = (List<String>) req.getSession().getAttribute("tablesList");
@@ -66,10 +69,10 @@ public class MainServlet extends HttpServlet {
         }
 
         if (action.startsWith("/connect")) {
-            //article = "connectArticle.jsp";
             if (dbManager != null) {
                 service.closeConnection(dbManager);
                 req.getSession().setAttribute("conn_settings", null);
+                req.getSession().setAttribute("tablesList", null);
             }
             String type = req.getParameter("type");
             ConnectionSettings settings = new ConnectionSettings(getConnectionParameters(req));
@@ -124,6 +127,18 @@ public class MainServlet extends HttpServlet {
                 String tableName = req.getParameter("tableName");
                 String result = service.dropTable(dbManager, tableName);
                 req.getSession().setAttribute("tablesList", service.list(dbManager));
+                req.setAttribute("result", result);
+                req.setAttribute("resultBlock", "result.jsp");
+            } catch (Exception e) {
+                req.setAttribute("result", e.getMessage());
+            }
+        } else if (action.startsWith("/delete")) {
+            article = "deleteArticle.jsp";
+            try {
+                String tableName = req.getParameter("tableName");
+                String columnName = req.getParameter("condColumnName");
+                String value = req.getParameter("condValue");
+                String result = service.delete(dbManager, tableName, columnName,value);
                 req.setAttribute("result", result);
                 req.setAttribute("resultBlock", "result.jsp");
             } catch (Exception e) {

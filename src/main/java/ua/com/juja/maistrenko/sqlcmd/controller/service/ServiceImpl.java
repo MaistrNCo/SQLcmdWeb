@@ -77,6 +77,13 @@ public class ServiceImpl implements Service {
     }
 
     @Override
+    public String delete(DBManager dbManager, String tableName, String columnName, String value) {
+        RowData condValue = new RowData();
+        condValue.put(columnName,value);
+        return "Deleted " + dbManager.delete(tableName,condValue) + " rows in table " + tableName;
+    }
+
+    @Override
     public String dropTable(DBManager dbManager, String tableName) {
         dbManager.drop(tableName);
         return "Table:'" +  tableName + "' dropped successfully";

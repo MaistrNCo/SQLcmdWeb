@@ -45,6 +45,10 @@
             border-collapse: collapse;
             width: 100%;
         }
+        table  td {
+
+            padding: 8px;
+        }
 
         table#DBtable  tr  {
         }
