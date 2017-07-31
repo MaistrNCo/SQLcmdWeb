@@ -70,4 +70,9 @@ public class ServiceImpl implements Service {
         result.addAll(dbManager.getColumnsNames(tableName));
         return result;
     }
+
+    @Override
+    public String clearTable(DBManager dbManager, String tableName) {
+        return "Deleted " + dbManager.clear(tableName) + " rows in table " + tableName;
+    }
 }

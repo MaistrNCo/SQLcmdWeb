@@ -5,6 +5,6 @@
     <form action="list" method="post">
         <input type="submit" value="Get tables">
     </form>
-
+    <br>
     <jsp:include page="${resultBlock}"/>
 </article>

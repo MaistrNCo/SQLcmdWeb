@@ -18,4 +18,6 @@ public interface Service {
     List<List<String>> find(DBManager dbManager, String tableName);
 
     List<String> getColumns(DBManager dbManager, String tableName);
+
+    String clearTable(DBManager dbManager, String tableName);
 }

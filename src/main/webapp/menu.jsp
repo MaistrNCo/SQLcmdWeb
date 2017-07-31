@@ -39,21 +39,32 @@
             padding: 1em;
             overflow: hidden;
         }
-        table.resultTab {
+
+        table#DBtable {
             font-family: arial, sans-serif;
             border-collapse: collapse;
             width: 100%;
         }
 
-        td.resultTab, th.resultTab {
+        table#DBtable  tr  {
+        }
+
+        table#DBtable  td  {
             border: 1px solid #dddddd;
             text-align: left;
             padding: 8px;
         }
 
-        tr.resultTab:nth-child(even) {
+        table#DBtable td :nth-child(even) {
             background-color: #dddddd;
         }
+
+        table#DBtable th {
+            background-color: black;
+            color: white;
+            padding: 8px;
+        }
+
     </style>
 </head>
 <body>

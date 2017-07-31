@@ -17,9 +17,10 @@
 
             <tr>
                 <td></td>
-                <td><input type="submit" value="Connect"></td>
+                <td><input type="submit" value="Get data"></td>
             </tr>
         </table>
     </form>
+    <br>
     <jsp:include page="${resultBlock}"/>
 </article>

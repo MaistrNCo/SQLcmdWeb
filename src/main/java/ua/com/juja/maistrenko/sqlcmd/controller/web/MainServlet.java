@@ -27,11 +27,11 @@ public class MainServlet extends HttpServlet {
         String action = getAction(req);
         req.setAttribute("resultBlock", "result.jsp");
         String article;
+        req.setAttribute("tablesList",req.getSession().getAttribute("tablesList"));
         if (action.startsWith("/list")) {
             article ="listArticle.jsp";
         } else if (action.startsWith("/find")) {
             article = "findArticle.jsp";
-            req.setAttribute("tablesList",req.getSession().getAttribute("tablesList"));
         } else if (action.startsWith("/create")) {
             article ="createArticle.jsp";
         } else if (action.startsWith("/insert")) {
@@ -57,9 +57,12 @@ public class MainServlet extends HttpServlet {
         DBManager dbManager = (DBManager) req.getSession().getAttribute("db_manager");
         req.setAttribute("resultBlock", "result.jsp");
         String article = "connectArticle.jsp";
-        if (dbManager == null && !action.startsWith("/connect")) {
+        List<String> tablesList = (List<String>)req.getSession().getAttribute("tablesList");
+        if ((dbManager == null||!dbManager.isConnected()) && !action.startsWith("/connect")) {
+            req.setAttribute("result", "Not connected yet.  Please use 'connect' command first");
             req.setAttribute("article", article);
             resp.sendRedirect(resp.encodeRedirectURL("menu"));
+            return;
         }
 
         if (action.startsWith("/connect")) {
@@ -74,7 +77,7 @@ public class MainServlet extends HttpServlet {
                 dbManager = service.connect(settings, type);
                 req.getSession().setAttribute("db_manager", dbManager);
                 req.getSession().setAttribute("conn_settings", settings);
-                req.setAttribute("result", "OK");
+                req.setAttribute("result", "Done");
             } catch (Exception e) {
                 req.setAttribute("result", e.getMessage());
             }
@@ -91,10 +94,12 @@ public class MainServlet extends HttpServlet {
             } catch (Exception e) {
                 req.setAttribute("result", e.getMessage());
             }
+        } else if (tablesList==null||tablesList.isEmpty()) {
+            article = "listArticle.jsp";
+            req.setAttribute("result", "Tables list is empty.  Use 'list' command to get it");
         } else if (action.startsWith("/find")) {
             article = "findArticle.jsp";
             try {
-                ;
                 List<List<String>> list = service.find(dbManager, req.getParameter("tableName"));
                 List<String> columns = service.getColumns(dbManager, req.getParameter("tableName"));
                 req.setAttribute("tableColumnsList", columns);
@@ -103,7 +108,18 @@ public class MainServlet extends HttpServlet {
             } catch (Exception e) {
                 req.setAttribute("result", e.getMessage());
             }
+        } else if (action.startsWith("/clear")) {
+            article = "clearArticle.jsp";
+            String tableName = req.getParameter("tableName");
+            String result = service.clearTable(dbManager,tableName);
+            req.setAttribute("result", result);
+            try {
+                 req.setAttribute("resultBlock", "result.jsp");
+            } catch (Exception e) {
+                req.setAttribute("result", e.getMessage());
+            }
         }
+
         drawMainPage(req, resp, article);
     }
 
