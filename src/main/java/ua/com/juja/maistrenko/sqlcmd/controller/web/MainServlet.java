@@ -27,13 +27,13 @@ public class MainServlet extends HttpServlet {
         String action = getAction(req);
         req.setAttribute("resultBlock", "result.jsp");
         String article;
-        req.setAttribute("tablesList",req.getSession().getAttribute("tablesList"));
+        req.setAttribute("tablesList", req.getSession().getAttribute("tablesList"));
         if (action.startsWith("/list")) {
-            article ="listArticle.jsp";
+            article = "listArticle.jsp";
         } else if (action.startsWith("/find")) {
             article = "findArticle.jsp";
         } else if (action.startsWith("/create")) {
-            article ="createArticle.jsp";
+            article = "createArticle.jsp";
         } else if (action.startsWith("/insert")) {
             article = "insertArticle.jsp";
         } else if (action.startsWith("/update")) {
@@ -57,8 +57,8 @@ public class MainServlet extends HttpServlet {
         DBManager dbManager = (DBManager) req.getSession().getAttribute("db_manager");
         req.setAttribute("resultBlock", "result.jsp");
         String article = "connectArticle.jsp";
-        List<String> tablesList = (List<String>)req.getSession().getAttribute("tablesList");
-        if ((dbManager == null||!dbManager.isConnected()) && !action.startsWith("/connect")) {
+        List<String> tablesList = (List<String>) req.getSession().getAttribute("tablesList");
+        if ((dbManager == null || !dbManager.isConnected()) && !action.startsWith("/connect")) {
             req.setAttribute("result", "Not connected yet.  Please use 'connect' command first");
             req.setAttribute("article", article);
             resp.sendRedirect(resp.encodeRedirectURL("menu"));
@@ -87,14 +87,14 @@ public class MainServlet extends HttpServlet {
                 List<String> list = service.list(dbManager);
                 List<String> columns = new LinkedList<>();
                 columns.add("Table");
-                req.getSession().setAttribute("tablesList",list);
+                req.getSession().setAttribute("tablesList", list);
                 req.setAttribute("tableColumnsList", columns);
                 req.setAttribute("table", list);
                 req.setAttribute("resultBlock", "table.jsp");
             } catch (Exception e) {
                 req.setAttribute("result", e.getMessage());
             }
-        } else if (tablesList==null||tablesList.isEmpty()) {
+        } else if (tablesList == null || tablesList.isEmpty()) {
             article = "listArticle.jsp";
             req.setAttribute("result", "Tables list is empty.  Use 'list' command to get it");
         } else if (action.startsWith("/find")) {
@@ -110,11 +110,22 @@ public class MainServlet extends HttpServlet {
             }
         } else if (action.startsWith("/clear")) {
             article = "clearArticle.jsp";
-            String tableName = req.getParameter("tableName");
-            String result = service.clearTable(dbManager,tableName);
-            req.setAttribute("result", result);
             try {
-                 req.setAttribute("resultBlock", "result.jsp");
+                String tableName = req.getParameter("tableName");
+                String result = service.clearTable(dbManager, tableName);
+                req.setAttribute("result", result);
+                req.setAttribute("resultBlock", "result.jsp");
+            } catch (Exception e) {
+                req.setAttribute("result", e.getMessage());
+            }
+        } else if (action.startsWith("/drop")) {
+            article = "dropArticle.jsp";
+            try {
+                String tableName = req.getParameter("tableName");
+                String result = service.dropTable(dbManager, tableName);
+                req.getSession().setAttribute("tablesList", service.list(dbManager));
+                req.setAttribute("result", result);
+                req.setAttribute("resultBlock", "result.jsp");
             } catch (Exception e) {
                 req.setAttribute("result", e.getMessage());
             }
@@ -134,7 +145,7 @@ public class MainServlet extends HttpServlet {
     }
 
     private String createConnectionInfo(ConnectionSettings settings) {
-        if (settings != null ) {
+        if (settings != null) {
             StringBuilder connectionInfo = new StringBuilder();
             connectionInfo.append(settings.getAddress());
             connectionInfo.append(" user=");

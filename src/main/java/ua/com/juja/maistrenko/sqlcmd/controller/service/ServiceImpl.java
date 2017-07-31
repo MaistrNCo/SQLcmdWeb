@@ -29,9 +29,9 @@ public class ServiceImpl implements Service {
     @Override
     public DBManager connect(ConnectionSettings conSettings, String type) {
         DBManager dbManager;
-        if (type.contains("MySQL")){
+        if (type.contains("MySQL")) {
             dbManager = new MySQLdbManager();
-        }else{
+        } else {
             dbManager = new PostgresDBManager();
         }
         dbManager.connect(conSettings);
@@ -53,11 +53,11 @@ public class ServiceImpl implements Service {
     @Override
     public List<List<String>> find(DBManager dbManager, String tableName) {
         List<List<String>> result = new LinkedList<>();
-        for (RowData row:dbManager.selectAllFromTable(tableName)) {
+        for (RowData row : dbManager.selectAllFromTable(tableName)) {
             List<String> listRow = new LinkedList<>();
             result.add(listRow);
-            for (Object value:row.getValues()) {
-                listRow.add((String)value);
+            for (Object value : row.getValues()) {
+                listRow.add((String) value);
             }
 
         }
@@ -74,5 +74,11 @@ public class ServiceImpl implements Service {
     @Override
     public String clearTable(DBManager dbManager, String tableName) {
         return "Deleted " + dbManager.clear(tableName) + " rows in table " + tableName;
+    }
+
+    @Override
+    public String dropTable(DBManager dbManager, String tableName) {
+        dbManager.drop(tableName);
+        return "Table:'" +  tableName + "' dropped successfully";
     }
 }

@@ -20,4 +20,6 @@ public interface Service {
     List<String> getColumns(DBManager dbManager, String tableName);
 
     String clearTable(DBManager dbManager, String tableName);
+
+    String dropTable(DBManager dbManager, String tableName);
 }
