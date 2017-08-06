@@ -57,8 +57,8 @@ public class MainServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = getAction(req);
         DBManager dbManager = (DBManager) req.getSession().getAttribute("db_manager");
-        req.setAttribute("tablesList", req.getSession().getAttribute("tablesList"));
-        //req.setAttribute("tableName", req.getParameter("tableName"));
+        //req.setAttribute("tablesList", req.getSession().getAttribute("tablesList"));
+        req.setAttribute("tableName", req.getParameter("tableName"));
         req.setAttribute("resultBlock", "result.jsp");
         String article = "connectArticle.jsp";
         List<String> tablesList = (List<String>) req.getSession().getAttribute("tablesList");
@@ -95,6 +95,23 @@ public class MainServlet extends HttpServlet {
                 req.setAttribute("tableColumnsList", columns);
                 req.setAttribute("table", list);
                 req.setAttribute("resultBlock", "table.jsp");
+            } catch (Exception e) {
+                req.setAttribute("result", e.getMessage());
+            }
+        } else if (action.startsWith("/create")) {
+            article = "createArticle.jsp";
+            try {
+                String newTableName = req.getParameter("newTableName");
+                List<String> fields = new LinkedList<>();
+                int ind = 1;
+                String field  = req.getParameter("fieldname" + ind);
+                while (field != null) {
+                    fields.add(field);
+                    field  = req.getParameter("fieldname" + ++ind);
+                }
+                String result = service.create(dbManager,newTableName,fields);
+                req.setAttribute("result", result);
+                req.setAttribute("resultBlock", "result.jsp");
             } catch (Exception e) {
                 req.setAttribute("result", e.getMessage());
             }

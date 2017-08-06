@@ -89,7 +89,10 @@
     <jsp:include page="${article}"/>
 
 
-    <footer>Copyright &copy; MaistrNCo</footer>
+    <footer>
+        Copyright &copy; MaistrNCo <br/>
+        <p>Today's date: <%= (new java.util.Date()).toLocaleString()%></p>
+    </footer>
 </div>
 </body>
 </html>

@@ -11,6 +11,11 @@
                 <td><select name="tableName" style="min-width: 15ch; ">
                     <c:forEach items="${tablesList}" var="item">
                         <option value="${item}">${item}</option>
+                        <%--<c:if test="${tableName!=null}">--%>
+                            <%--<c:if test="${item = tableName}">--%>
+                                <%--<option value="${item}">${item} selected</option>--%>
+                            <%--</c:if>--%>
+                        <%--</c:if>--%>
                     </c:forEach>
                 </select></td>
             </tr>

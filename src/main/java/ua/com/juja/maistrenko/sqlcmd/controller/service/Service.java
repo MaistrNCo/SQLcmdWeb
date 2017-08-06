@@ -27,4 +27,6 @@ public interface Service {
     String delete(DBManager dbManager, String tableName, String columnName, String value);
 
     String update(DBManager dbManager, String tableName, String condColumnName, String condValue, RowData setValues);
+
+    String create(DBManager dbManager,String newTableName, List<String> fields);
 }

@@ -85,6 +85,13 @@ public class ServiceImpl implements Service {
     }
 
     @Override
+    public String create(DBManager dbManager,String newTableName, List<String> fields) {
+        dbManager.create(newTableName,fields);
+        return "Created table " + newTableName;
+    }
+
+
+    @Override
     public String delete(DBManager dbManager, String tableName, String columnName, String value) {
         RowData condValue = new RowData();
         condValue.put(columnName,value);
