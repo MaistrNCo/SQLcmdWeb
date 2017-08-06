@@ -29,4 +29,6 @@ public interface Service {
     String update(DBManager dbManager, String tableName, String condColumnName, String condValue, RowData setValues);
 
     String create(DBManager dbManager,String newTableName, List<String> fields);
+
+    String insert(DBManager dbManager, String newTableName, RowData insertData);
 }

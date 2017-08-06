@@ -178,6 +178,25 @@ public class MainServlet extends HttpServlet {
             } catch (Exception e) {
                 req.setAttribute("result", e.getMessage());
             }
+        } else if (action.startsWith("/insert")) {
+            article = "insertArticle.jsp";
+            try {
+                String newTableName = req.getParameter("tableName");
+                RowData insertData  = new RowData();
+                int ind = 1;
+                String field  = req.getParameter("fieldname" + ind);
+                String value  = req.getParameter("value" + ind);
+                while (field != null) {
+                    insertData.put(field,value);
+                    field  = req.getParameter("fieldname" + ++ind);
+                    value  = req.getParameter("value" + ind);
+                }
+                String result = service.insert(dbManager,newTableName,insertData);
+                req.setAttribute("result", result);
+                req.setAttribute("resultBlock", "result.jsp");
+            } catch (Exception e) {
+                req.setAttribute("result", e.getMessage());
+            }
         }
 
         drawMainPage(req, resp, article);

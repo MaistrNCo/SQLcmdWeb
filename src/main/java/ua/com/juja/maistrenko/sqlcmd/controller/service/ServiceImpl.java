@@ -90,6 +90,12 @@ public class ServiceImpl implements Service {
         return "Created table " + newTableName;
     }
 
+    @Override
+    public String insert(DBManager dbManager, String tableName, RowData insertData) {
+        dbManager.insert(tableName,insertData);
+        return "Inserted row: " + insertData.toString();
+    }
+
 
     @Override
     public String delete(DBManager dbManager, String tableName, String columnName, String value) {

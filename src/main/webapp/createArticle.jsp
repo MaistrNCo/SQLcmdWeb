@@ -11,7 +11,6 @@
             </tr>
 
             <tr>
-                <%--<td> <input type="hidden" name="id" value="1" /></td>--%>
                 <td><input size=25 name="fieldname1" id="fieldname"></td>
                 <td><input style="width:23px;height:25px" type="button" id="delRowBtn" value="-" onclick="deleteRow(this)"/></td>
             </tr>
@@ -44,12 +43,9 @@
 
 
         function insRow() {
-            //console.log('hi');
             var x = document.getElementById('newTable');
             var new_row = x.rows[1].cloneNode(true);
             var len = x.rows.length;
-//            new_row.cells[0].value = len;
-//            new_row.cells[0].name += len;
             var inp1 = new_row.cells[0].getElementsByTagName('input')[0];
             inp1.id += len;
             inp1.name = "fieldname" + len;
