@@ -12,26 +12,39 @@
                     </c:forEach>
                 </select></td>
             </tr>
+        </table>
+        <table id="conditions">
+            <caption>Conditions:</caption>
             <tr>
-                <td>Condition:</td>
-                <td>Column:</td>
-                <td><input name="condColumnName" ></td>
-                <td>Value:</td>
-                <td><input name="condValue" ></td>
+                <td>field name</td>
+                <td>field value</td>
+                <br></td>
             </tr>
             <tr>
-                <td>Update to:</td>
-                <td>Column:</td>
-                <td><input name="updateColumnName" ></td>
-                <td>Value:</td>
-                <td><input name="updateValue" ></td>
-            </tr>
-
-            <tr>
-                <td></td>
-                <td><input type="submit" value="Update"></td>
+                <td><input size=20 name="condFieldName1" id="condFieldName"></td>
+                <td><input size=20 name="condValue1" id="condValue"></td>
+                <td><input style="width:23px;height:25px" type="button" id="addRowBtn" value="+" onclick="insRow('conditions','cond')"/>
+                <td><input style="width:23px;height:25px" type="button" id="delRowBtn" value="-" onclick="deleteRow(this,'conditions','cond')"/></td>
             </tr>
         </table>
+
+        <table id="values">
+            <caption>New values:</caption>
+            <tr>
+                <td>field name</td>
+                <td>field value</td>
+                <br></td>
+            </tr>
+            <tr>
+                <td><input size=20 name="newFieldName1" id="newFieldName"></td>
+                <td><input size=20 name="newValue1" id="newValue"></td>
+                <td><input style="width:23px;height:25px" type="button" id="addRowValueBtn" value="+" onclick="insRow('values','new')"/>
+                <td><input style="width:23px;height:25px" type="button" id="delRowValueBtn" value="-" onclick="deleteRow(this,'values','')"/></td>
+            </tr>
+        </table>
+
+        <td><input type="submit" value="Update"></td>
     </form>
     <jsp:include page="${resultBlock}"/>
+
 </article>

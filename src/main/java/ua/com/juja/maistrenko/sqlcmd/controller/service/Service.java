@@ -24,9 +24,9 @@ public interface Service {
 
     String dropTable(DBManager dbManager, String tableName);
 
-    String delete(DBManager dbManager, String tableName, String columnName, String value);
+    String delete(DBManager dbManager, String tableName, RowData conditions);
 
-    String update(DBManager dbManager, String tableName, String condColumnName, String condValue, RowData setValues);
+    String update(DBManager dbManager, String tableName, RowData conditions, RowData insertData);
 
     String create(DBManager dbManager,String newTableName, List<String> fields);
 

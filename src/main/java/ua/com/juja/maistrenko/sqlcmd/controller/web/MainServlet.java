@@ -104,10 +104,10 @@ public class MainServlet extends HttpServlet {
                 String newTableName = req.getParameter("newTableName");
                 List<String> fields = new LinkedList<>();
                 int ind = 1;
-                String field  = req.getParameter("fieldname" + ind);
+                String field  = req.getParameter("FieldName" + ind);
                 while (field != null) {
                     fields.add(field);
-                    field  = req.getParameter("fieldname" + ++ind);
+                    field  = req.getParameter("FieldName" + ++ind);
                 }
                 String result = service.create(dbManager,newTableName,fields);
                 req.setAttribute("result", result);
@@ -154,9 +154,8 @@ public class MainServlet extends HttpServlet {
             article = "deleteArticle.jsp";
             try {
                 String tableName = req.getParameter("tableName");
-                String condColumnName = req.getParameter("condColumnName");
-                String condValue = req.getParameter("condValue");
-                String result = service.delete(dbManager, tableName, condColumnName,condValue);
+                RowData conditions  = getRowDataFromParams(req,"FieldName","Value");
+                String result = service.delete(dbManager, tableName, conditions);
                 req.setAttribute("result", result);
                 req.setAttribute("resultBlock", "result.jsp");
             } catch (Exception e) {
@@ -166,13 +165,9 @@ public class MainServlet extends HttpServlet {
             article = "updateArticle.jsp";
             try {
                 String tableName = req.getParameter("tableName");
-                String condColumnName = req.getParameter("condColumnName");
-                String condValue = req.getParameter("condValue");
-                String columnName = req.getParameter("updateColumnName");
-                String value = req.getParameter("updateValue");
-                RowData setValues = new RowData();
-                setValues.put(columnName,value);
-                String result = service.update(dbManager, tableName, condColumnName,condValue,setValues);
+                RowData conditions = getRowDataFromParams(req, "condFieldName","condValue");
+                RowData insertData  = getRowDataFromParams(req, "newFieldName","newValue");
+                String result = service.update(dbManager, tableName, conditions,insertData);
                 req.setAttribute("result", result);
                 req.setAttribute("resultBlock", "result.jsp");
             } catch (Exception e) {
@@ -181,17 +176,9 @@ public class MainServlet extends HttpServlet {
         } else if (action.startsWith("/insert")) {
             article = "insertArticle.jsp";
             try {
-                String newTableName = req.getParameter("tableName");
-                RowData insertData  = new RowData();
-                int ind = 1;
-                String field  = req.getParameter("fieldname" + ind);
-                String value  = req.getParameter("value" + ind);
-                while (field != null) {
-                    insertData.put(field,value);
-                    field  = req.getParameter("fieldname" + ++ind);
-                    value  = req.getParameter("value" + ind);
-                }
-                String result = service.insert(dbManager,newTableName,insertData);
+                String tableName = req.getParameter("tableName");
+                RowData insertData  = getRowDataFromParams(req,"FieldName","Value");
+                String result = service.insert(dbManager,tableName,insertData);
                 req.setAttribute("result", result);
                 req.setAttribute("resultBlock", "result.jsp");
             } catch (Exception e) {
@@ -200,6 +187,19 @@ public class MainServlet extends HttpServlet {
         }
 
         drawMainPage(req, resp, article);
+    }
+
+    private RowData getRowDataFromParams(HttpServletRequest req, String fieldName, String fieldValue) {
+        RowData result = new RowData();
+        int ind = 1;
+        String field  = req.getParameter(fieldName + ind);
+        String value  = req.getParameter(fieldValue + ind);
+        while (field != null) {
+            result.put(field,value);
+            field  = req.getParameter(fieldName + ++ind);
+            value  = req.getParameter(fieldValue + ind);
+        }
+        return result;
     }
 
     private List<String> getConnectionParameters(HttpServletRequest req) {

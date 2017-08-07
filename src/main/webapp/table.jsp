@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <table id="DBtable">
+    <caption>${tableName}</caption>
     <thead>
     <tr>
         <c:forEach items="${tableColumnsList}" var="column">

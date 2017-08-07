@@ -77,11 +77,8 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public String update(DBManager dbManager, String tableName, String condColumnName, String condValue, RowData setValues) {
-        RowData condValues = new RowData();
-        condValues.put(condColumnName,condValue);
-
-        return "Updated " + dbManager.update(tableName,condValues,setValues) + "rows in table '"+ tableName + "'";
+    public String update(DBManager dbManager, String tableName, RowData conditions, RowData insertData) {
+         return "Updated " + dbManager.update(tableName,conditions,insertData) + "rows in table '"+ tableName + "'";
     }
 
     @Override
@@ -93,15 +90,13 @@ public class ServiceImpl implements Service {
     @Override
     public String insert(DBManager dbManager, String tableName, RowData insertData) {
         dbManager.insert(tableName,insertData);
-        return "Inserted row: " + insertData.toString();
+        return "Inserted row: " + insertData.toString() + "in table '" + tableName + "'";
     }
 
 
     @Override
-    public String delete(DBManager dbManager, String tableName, String columnName, String value) {
-        RowData condValue = new RowData();
-        condValue.put(columnName,value);
-        return "Deleted " + dbManager.delete(tableName,condValue) + " rows in table '" + tableName + "'";
+    public String delete(DBManager dbManager, String tableName, RowData conditions) {
+        return "Deleted " + dbManager.delete(tableName,conditions) + " rows in table '" + tableName + "'";
     }
 
     @Override

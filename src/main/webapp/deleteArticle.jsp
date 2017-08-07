@@ -12,19 +12,23 @@
                     </c:forEach>
                 </select></td>
             </tr>
+        </table>
+        <table id="conditions">
+            <caption>Conditions:</caption>
             <tr>
-                <td>Condition:</td>
-                <td>Column:</td>
-                <td><input name="condColumnName" ></td>
-                <td>Value:</td>
-                <td><input name="condValue" ></td>
+                <td>field name</td>
+                <td>field value</td>
+                <br></td>
             </tr>
-
             <tr>
-                <td></td>
-                <td><input type="submit" value="Delete"></td>
+                <td><input size=20 name="FieldName1" id="FieldName"></td>
+                <td><input size=20 name="Value1" id="Value"></td>
+                <td><input style="width:23px;height:25px" type="button" id="addRowBtn" value="+" onclick="insRow('conditions','')"/>
+                <td><input style="width:23px;height:25px" type="button" id="delRowBtn" value="-" onclick="deleteRow(this,'conditions','')"/></td>
             </tr>
         </table>
+        <td><input type="submit" value="Delete"></td>
     </form>
     <jsp:include page="${resultBlock}"/>
+
 </article>
