@@ -1,11 +1,13 @@
 package ua.com.juja.maistrenko.sqlcmd.controller.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ua.com.juja.maistrenko.sqlcmd.controller.service.Service;
-import ua.com.juja.maistrenko.sqlcmd.controller.service.ServiceImpl;
 import ua.com.juja.maistrenko.sqlcmd.model.ConnectionSettings;
 import ua.com.juja.maistrenko.sqlcmd.model.DBManager;
 import ua.com.juja.maistrenko.sqlcmd.model.RowData;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,12 +17,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class MainServlet extends HttpServlet {
-    Service service;
+    @Autowired
+    private Service service;
+
 
     @Override
-    public void init() throws ServletException {
-        super.init();
-        service = new ServiceImpl();
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
+                config.getServletContext());
     }
 
     @Override

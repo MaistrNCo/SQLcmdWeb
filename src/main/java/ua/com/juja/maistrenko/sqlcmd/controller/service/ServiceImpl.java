@@ -1,5 +1,6 @@
 package ua.com.juja.maistrenko.sqlcmd.controller.service;
 
+import org.springframework.stereotype.Component;
 import ua.com.juja.maistrenko.sqlcmd.model.ConnectionSettings;
 import ua.com.juja.maistrenko.sqlcmd.model.DBManager;
 import ua.com.juja.maistrenko.sqlcmd.model.RowData;
@@ -10,6 +11,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+@Component
 public class ServiceImpl implements Service {
 
     @Override
