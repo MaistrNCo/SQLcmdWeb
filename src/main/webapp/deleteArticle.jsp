@@ -24,7 +24,7 @@
                 <td><input size=20 name="FieldName1" id="FieldName"></td>
                 <td><input size=20 name="Value1" id="Value"></td>
                 <td><input style="width:23px;height:25px" type="button" id="addRowBtn" value="+" onclick="insRow('conditions','')"/>
-                <td><input style="width:23px;height:25px" type="button" id="delRowBtn" value="-" onclick="deleteRow(this,'conditions','')"/></td>
+                <td><input style="width:23px;height:25px" type="button" id="delRowBtn" value="-" onclick="deleteRow(this,'conditions','')"/>
             </tr>
         </table>
         <td><input type="submit" value="Delete"></td>
