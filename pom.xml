@@ -79,7 +79,7 @@
                 <version>2.2</version>
                 <configuration>
                     <url>http://192.168.99.11:8080/manager/text</url>
-                    <server>TomcatServer</server>
+                    <server>virtualTomcatServer</server>
                     <path>/SQLcmd</path>
                 </configuration>
             </plugin>

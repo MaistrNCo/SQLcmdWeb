@@ -1,0 +1,67 @@
+div.container {
+    width: 100%;
+    border: 1px solid gray;
+    font-family: "Segoe UI",Arial,sans-serif;
+}
+header, footer {
+    padding: 1em;
+    color: white;
+    background-color: steelblue;
+    clear: left;
+    text-align: center;
+    /*text-shadow: 2px 2px 3px #ccc;*/
+}
+nav {
+    float: left;
+    max-width: 160px;
+    margin: 0;
+    padding: 1em;
+    border-left: 1px solid gray;
+}
+nav ul {
+    list-style-type: none;
+    right: 16px;
+    padding: 8px 12px;
+}
+nav ul a {
+    text-decoration: none;
+}
+article {
+    margin-left: 170px;
+    border-left: 1px solid gray;
+    padding: 1em;
+    overflow: hidden;
+}
+table caption {
+    padding: 2px;
+    text-align: left;
+}
+table td {
+    padding: 2px;
+}
+
+table#DBtable {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table#DBtable  tr  {
+}
+
+table#DBtable  td  {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+table#DBtable td :nth-child(even) {
+    background-color: #dddddd;
+}
+
+table#DBtable th {
+    background-color: black;
+    color: white;
+    padding: 8px;
+}
+
