@@ -33,6 +33,7 @@ public class MainServlet extends HttpServlet {
         String action = getAction(req);
         req.setAttribute("resultBlock", "result.jsp");
         String article;
+        article = "connectArticle.jsp";
         req.setAttribute("tablesList", req.getSession().getAttribute("tablesList"));
         //req.setAttribute("tableName", req.getParameter("tableName"));
         if (action.startsWith("/list")) {
@@ -51,7 +52,7 @@ public class MainServlet extends HttpServlet {
             article = "clearArticle.jsp";
         } else if (action.startsWith("/drop")) {
             article = "dropArticle.jsp";
-        } else {  //(action.startsWith("/connect")){
+        } else if (action.startsWith("/connect")){  //){
             article = "connectArticle.jsp";
         }
         drawMainPage(req, resp, article);
